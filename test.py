@@ -10,15 +10,19 @@ st.markdown("""
 .stApp {
     background-color: #FFF0F5;
 }
-/* Yazıları ve butonları kocaman yapalım ki gözlüksüz okunsun */
-html, body, [class*="css"]  {
+/* YAZILARI KOYU RENK VE KOCAMAN YAPALIM */
+html, body, [class*="st-"], p, div, label {
     font-size: 22px !important; 
     font-family: 'Georgia', serif;
+    color: #333333 !important; /* İŞTE BURASI: YAZILARI KOYU GRİ YAPAR */
 }
 h1 {
     color: #C71585 !important;
     text-align: center;
     font-size: 40px !important;
+}
+h2, h3 {
+    color: #333333 !important;
 }
 .stButton>button {
     width: 100%; 
@@ -26,12 +30,13 @@ h1 {
     font-size: 26px !important;
     font-weight: bold; 
     background-color: #C71585; 
-    color: white;
+    color: white !important;
     padding: 15px;
 }
 .stRadio label {
     font-size: 20px !important;
     font-weight: bold;
+    color: #333333 !important; /* SEÇENEKLERİN YAZI RENGİ */
 }
 </style>
 """, unsafe_allow_html=True)
