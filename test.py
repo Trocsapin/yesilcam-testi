@@ -1,6 +1,12 @@
 import streamlit as st
 from google import genai
 import random
+import urllib.parse 
+
+# ==========================================
+# AYAR: SİTE LİNKİ
+# ==========================================
+SITENIZIN_LINKI = "https://yesilcam-testi.streamlit.app/"
 
 # ==========================================
 # PART 1: ULTRA ALBENİLİ VE MOBİL UYUMLU TASARIM
@@ -9,111 +15,40 @@ st.set_page_config(page_title="Yeşilçam Eğlence Merkezi", page_icon="🎬", l
 
 st.markdown("""
 <style>
-/* Genel Arka Plan */
-.stApp {
-    background: radial-gradient(circle, #2c0e2c 0%, #1a051a 100%);
-    color: #ffe0b3 !important; 
-}
+.stApp { background: radial-gradient(circle, #2c0e2c 0%, #1a051a 100%); color: #ffe0b3 !important; }
+html, body, [class*="st-"], p, div, label { font-size: 20px !important; font-family: 'Georgia', serif; color: #ffe0b3 !important; }
+h1 { color: #ff3399 !important; text-align: center; font-size: 40px !important; font-weight: bold; text-shadow: 0 0 10px #ff3399, 0 0 20px #ff3399; margin-bottom: 20px; }
+h2, h3, h4 { color: #ff3399 !important; text-align: center; }
 
-/* Tüm Yazı Tipleri */
-html, body, [class*="st-"], p, div, label {
-    font-size: 20px !important; 
-    font-family: 'Georgia', serif;
-    color: #ffe0b3 !important; 
-}
+/* SEKMELER */
+div[data-baseweb="tab-list"] { gap: 5px; }
+button[data-baseweb="tab"] { background-color: #4d0026 !important; color: #ffe0b3 !important; border-radius: 10px !important; border: 2px solid #ff3399 !important; padding: 10px 15px !important; font-size: 20px !important; font-weight: bold !important; white-space: normal !important; }
+button[data-baseweb="tab"][aria-selected="true"] { background: linear-gradient(180deg, #ff3399 0%, #ff0066 100%) !important; color: white !important; border: 2px solid white !important; box-shadow: 0 0 15px #ff3399; }
 
-/* Ana Başlık */
-h1 {
-    color: #ff3399 !important; 
-    text-align: center;
-    font-size: 40px !important;
-    font-weight: bold;
-    text-shadow: 0 0 10px #ff3399, 0 0 20px #ff3399; 
-    margin-bottom: 20px;
-}
-h2, h3, h4 {
-    color: #ff3399 !important;
-    text-align: center;
-}
-
-/* --- SEKMELERİN (TABS) GENEL TASARIMI --- */
-div[data-baseweb="tab-list"] {
-    gap: 5px; /* Sekmeler arası boşluk */
-}
-button[data-baseweb="tab"] {
-    background-color: #4d0026 !important; 
-    color: #ffe0b3 !important; 
-    border-radius: 10px !important;
-    border: 2px solid #ff3399 !important;
-    padding: 10px 15px !important;
-    font-size: 20px !important;
-    font-weight: bold !important;
-    white-space: normal !important; 
-}
-button[data-baseweb="tab"][aria-selected="true"] {
-    background: linear-gradient(180deg, #ff3399 0%, #ff0066 100%) !important; 
-    color: white !important;
-    border: 2px solid white !important;
-    box-shadow: 0 0 15px #ff3399; 
-}
-
-/* --- İŞTE SİHRİN OLDUĞU YER: MOBİL EKRAN KORUMASI --- */
-/* Ekran genişliği 768px'den küçükse (Yani Telefonsa) bu kodlar çalışır */
+/* MOBİL UYUM */
 @media (max-width: 768px) {
-    div[data-baseweb="tab-list"] {
-        flex-direction: column !important; /* Sekmeleri yan yana değil, alt alta diz! */
-        width: 100% !important;
-    }
-    button[data-baseweb="tab"] {
-        width: 100% !important; /* Butonları telefon ekranının sonuna kadar uzat */
-        margin-bottom: 10px !important; /* Alt alta binerken aralarına boşluk koy */
-        border-radius: 15px !important; /* Köşelerini daha yumuşak yap */
-        padding: 15px !important; /* Tıklaması kolay olsun diye büyüt */
-        font-size: 22px !important; /* Telefondaki yazıyı biraz daha büyüt */
-    }
+    div[data-baseweb="tab-list"] { flex-direction: column !important; width: 100% !important; }
+    button[data-baseweb="tab"] { width: 100% !important; margin-bottom: 10px !important; border-radius: 15px !important; padding: 15px !important; font-size: 22px !important; }
 }
 
-/* Test Butonları */
-.stButton>button {
-    width: 100%; 
-    border-radius: 20px; 
-    font-size: 26px !important;
-    font-weight: bold; 
-    background: linear-gradient(180deg, #ffcc00 0%, #ff9900 100%); 
-    color: #33001a !important; 
-    border: 4px solid #ffe0b3;
-    padding: 15px;
-    box-shadow: 0 5px 15px rgba(255, 204, 0, 0.4);
-    transition: all 0.3s ease;
-}
-.stButton>button:hover {
-    transform: scale(1.03); 
-}
+/* BUTONLAR */
+.stButton>button { width: 100%; border-radius: 20px; font-size: 26px !important; font-weight: bold; background: linear-gradient(180deg, #ffcc00 0%, #ff9900 100%); color: #33001a !important; border: 4px solid #ffe0b3; padding: 15px; box-shadow: 0 5px 15px rgba(255, 204, 0, 0.4); transition: all 0.3s ease; }
+.stButton>button:hover { transform: scale(1.03); }
 
-/* Görsel Çerçevesi */
-img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 90%; /* Mobilde biraz daha geniş görünsün */
-    border-radius: 15px;
-    border: 8px solid #ffe0b3; 
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
+/* RESİMLER */
+img { display: block; margin-left: auto; margin-right: auto; width: 90%; border-radius: 15px; border: 8px solid #ffe0b3; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7); margin-top: 20px; margin-bottom: 20px; }
 
-/* Kutular */
-.stAlert {
-    background-color: #33001a !important; 
-    border: 2px solid #ff3399 !important;
-    border-radius: 15px;
-    color: #ffe0b3 !important;
-}
+/* KUTULAR */
+.stAlert { background-color: #33001a !important; border: 2px solid #ff3399 !important; border-radius: 15px; color: #ffe0b3 !important; }
+
+/* PAYLAŞ BUTONLARI İÇİN ÖZEL TASARIM */
+.share-btn { display: inline-block; width: 48%; text-align: center; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 18px; text-decoration: none !important; margin-top: 10px; color: white !important; }
+.fb-btn { background-color: #1877F2; border: 2px solid #0d5bb5; }
+.wa-btn { background-color: #25D366; border: 2px solid #1da851; float: right; }
+@media (max-width: 768px) { .share-btn { width: 100%; float: none; margin-bottom: 10px; font-size: 20px; padding: 15px; } }
 </style>
 """, unsafe_allow_html=True)
 
-# Ana Başlık
 st.title("🎬 Yeşilçam Eğlence Merkezi")
 st.markdown("<h3 style='text-align: center; color: #ffe0b3;'>Hoş geldin sultanım/jönüm! Nostalji dolu bir yolculuğa hazır mısın? 💖</h3>", unsafe_allow_html=True)
 st.markdown("---")
@@ -123,89 +58,75 @@ GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 # ==========================================
 # PART 2: DATA VE HAVUZLAR
 # ==========================================
-
 jon_sultan_pool = [
     {"q": "Bir haksızlık gördüğünde ne yaparsın? 👊", "c": ["Gözümü budaktan sakınmam, dalarım!", "Önce uyarır, güzellikle çözmeye çalışırım.", "Planımı yapar, akılla çözerim.", "Bana dokunmayan yılan bin yaşasın."]},
     {"q": "Pazar sabahı evdeki halin nasıldır? ☀️", "c": ["Herkese mükellef bir sofra hazırlarım.", "Kahvemi içer, keyfime bakarım.", "Hemen işlere girişirim, hamaratım!", "Süslenir püslenir, kendime bakarım."]},
     {"q": "Aşk hayatında nasıl birisin? 🌹", "c": ["Sevdim mi tam severim, gözüm başkasını görmez!", "Romantiğimdir, şiirler okur, jestler yaparım.", "Çapkınlık ruhumda var ama belli etmem.", "Kader kısmet der, akışına bırakırım."]},
-    {"q": "Altın gününde/arkadaş ortamında sen kimsin? ☕", "c": ["Dert dinleyen, akıl veren ablayım/abiyim.", "En şık giyinen ve en asil duranım.", "Haksızlığa gelemeyen, dobralığıyla bilinenim.", "Ortamın neşe kaynağıyım."]},
-    {"q": "Bir baloya davet edilsen ne giyersin? 👗👔", "c": ["Dönemin en moda, en dikkat çekici kıyafetini.", "Sade ama çok asil bir takım/elbise.", "Rahat, dans edebileceğim bir şeyler.", "Kiralık milarık, idare eder bir şeyler."]},
-    {"q": "En büyük hayalin nedir? ⭐", "c": ["Sonsuz, mutlu bir yuva kurmak.", "Herkesin gıpta ettiği bir kariyer/ün.", "Adaleti sağlamak, zayıfı korumak.", "Dünyayı gezip, hayatın tadını çıkarmak."]},
-    {"q": "Paraya bakış açın nasıldır? 💰", "c": ["Para araçtır, sevdiklerim için harcarım.", "Prestij ve güç aracıdır, biriktiririm.", "Emeğimin karşılığıdır, hak ettiğimi alırım.", "Bugün var yarın yok, yer içerim."]},
-    {"q": "Bir filmde başrol olsan hangi türü seçersin? 🎥", "c": ["Ağlamaktan gözlerin şişeceği bir dram.", "Kahkahaların havada uçuşacağı bir komedi.", "Yumrukların konuşacağı bir aksiyon.", "Herkesi şok edecek bir gizem/gerilim."]}
+    {"q": "Altın gününde/arkadaş ortamında sen kimsin? ☕", "c": ["Dert dinleyen, akıl veren ablayım/abiyim.", "En şık giyinen ve en asil duranım.", "Haksızlığa gelemeyen, dobralığıyla bilinenim.", "Ortamın neşe kaynağıyım."]}
 ]
-
 kotu_komedi_pool = [
     {"q": "Planın tıkır tıkır işlerken ne hissedersin? 😏", "c": ["Sinsi sinsi gülerim, zafer benimdir! (Kötü)", "Herkesin mutlu olması beni de sevindirir. (Komedi)", "Daha fazlasını nasıl yaparım diye düşünürüm.", "Aman tıkırındaysa bozmayalım."]},
-    {"q": "Ortamda gerginlik varsa ne yaparsın? 💥", "c": ["Gerginliği ben tırmandırırım, kaos severim! (Kötü)", "Bir espri yapar, herkesi güldürürüm. (Komedi)", "Sessizce olay yerinden uzaklaşırım.", "Ara buluculuk yapmaya çalışırım."]},
-    {"q": "Hayat felsefen nedir? 🌟", "c": ["Güçlü olan kazanır, gerisi yalan.", "Gül geç dünyaya, ağlamaya değmez.", "Adalet mülkün temelidir.", "Kaderimiz neyse o."]},
-    {"q": "En sevdiğin içecek nedir? 🥤", "c": ["Şöyle buzlu bir gazoz! (Nuri Alço efekti)", "Bol köpüklü bir kahve.", "Şalgam suyu.", "Ben sadece su içerim."]}
+    {"q": "Ortamda gerginlik varsa ne yaparsın? 💥", "c": ["Gerginliği ben tırmandırırım, kaos severim! (Kötü)", "Bir espri yapar, herkesi güldürürüm. (Komedi)", "Sessizce olay yerinden uzaklaşırım.", "Ara buluculuk yapmaya çalışırım."]}
 ]
-
 replik_fali_pool = [
-    {"r": "Benim adım Tatar Ramazan, ben bu oyunu bozarım!", "t": "Bugün önüne engeller çıkabilir. Dikkatli ol ama taviz verme, gerekirse oyunun kurallarını sen koy."},
-    {"r": "Sevgi neydi? Sevgi emekti.", "t": "Bugün ilişkilerinde veya işinde sabırlı olman, emek vermen gerekecek. Unutma, gerçek değer emekte gizlidir."},
-    {"r": "Bedenime sahip olabilirsin ama ruhuma asla!", "t": "Bugün birileri seni zorlayabilir veya istemediğin bir şeye mecbur bırakabilir. Duruşunu bozma, iç dünyanı koru."},
-    {"r": "Evlenince bakarız tatlım...", "t": "Bugün sana verilen sözlere hemen inanma. Biraz bekle, gör, acele etme. Tedbirli olmakta fayda var."},
-    {"r": "Ula, façamızı bozdun!", "t": "Bugün planların küçük bir aksaklık yüzünden bozulabilir. Moralini bozma, façanı düzelt ve devam et."},
-    {"r": "Mazlumu getirin bana!", "t": "Bugün enerjin çok yüksek. Haksızlıklara karşı durma veya birilerine yardım etme isteği duyabilirsin. Bu enerjiyi doğru kullan."},
-    {"r": "Yaz kızım, 200 torba çimento...", "t": "Bugün iş yerinde veya evde sorumlulukların artabilir. Organize ol, maddeleri yaz ve tıkır tıkır hallet."},
-    {"r": "Nayır, Nolamaz!", "t": "İçinde 'hayır' demek istediğin bir durum varsa, çekinme. Bugün Nolamaz dediğin şey, seni yarın koruyabilir."}
+    {"r": "Benim adım Tatar Ramazan, ben bu oyunu bozarım!", "t": "Bugün önüne engeller çıkabilir. Dikkatli ol ama taviz verme."},
+    {"r": "Sevgi neydi? Sevgi emekti.", "t": "Bugün ilişkilerinde sabırlı olman, emek vermen gerekecek."},
+    {"r": "Bedenime sahip olabilirsin ama ruhuma asla!", "t": "Bugün birileri seni zorlayabilir. Duruşunu bozma, iç dünyanı koru."}
 ]
 
 # ==========================================
-# PART 3: SEKME SİSTEMİ VE OYUN MANTIĞI
+# PAYLAŞIM BUTONLARI OLUŞTURUCU FONKSİYON
 # ==========================================
+def paylasim_butonlari_olustur(metin):
+    hazir_mesaj = f"{metin}\n\nSen hangi efsanesin? Hemen testi çöz: {SITENIZIN_LINKI}"
+    encoded_mesaj = urllib.parse.quote(hazir_mesaj)
+    encoded_url = urllib.parse.quote(SITENIZIN_LINKI)
+    
+    fb_link = f"https://www.facebook.com/sharer/sharer.php?u={encoded_url}&quote={encoded_mesaj}"
+    wa_link = f"https://api.whatsapp.com/send?text={encoded_mesaj}"
+    
+    st.markdown(f"""
+        <div style="margin-top: 20px; margin-bottom: 20px;">
+            <a href="{fb_link}" target="_blank" class="share-btn fb-btn">📘 Facebook'ta Paylaş</a>
+            <a href="{wa_link}" target="_blank" class="share-btn wa-btn">🟩 WhatsApp'tan Gönder</a>
+            <div style="clear: both;"></div>
+        </div>
+    """, unsafe_allow_html=True)
 
+# ==========================================
+# PART 3: SEKME SİSTEMİ
+# ==========================================
 tab1, tab2, tab3 = st.tabs(["🎭 Ruhundaki Jön/Sultan", "🦹‍♂️ Kötüler ve Komedyenler", "🥠 Günlük Replik Falı"])
 
-# --- TAB 1 ---
 with tab1:
     st.markdown("<h3 style='text-align: center; color: #ffe0b3;'>Efsanevi Bir Aşkın Kahramanı Mısın?</h3>", unsafe_allow_html=True)
     cinsiyet = st.radio("Önce bir tanıyalım seni...", ["👩 Sultanım (Kadın)", "👨 Jönüm (Erkek)"], horizontal=True, key="cinsiyet_1")
-    st.markdown("---")
-
-    if 'selected_questions_1' not in st.session_state:
-        st.session_state['selected_questions_1'] = random.sample(jon_sultan_pool, 3)
     
-    selected_questions = st.session_state['selected_questions_1']
+    if 'selected_questions_1' not in st.session_state: st.session_state['selected_questions_1'] = random.sample(jon_sultan_pool, 3)
     
     cevaplar_1 = []
-    for i, q in enumerate(selected_questions):
+    for i, q in enumerate(st.session_state['selected_questions_1']):
         c = st.radio(q["q"], q["c"], index=None, key=f"q1_{i}")
         if c: cevaplar_1.append(c)
 
     st.markdown("---")
-    
     if st.button("✨ Sonucumu Göster ✨", key="btn_1"):
-        if not cevaplar_1:
-            st.warning("Aman canım, sonucu görmek için tüm soruları cevapla! 🌸")
+        if not cevaplar_1: st.warning("Aman canım, sonucu görmek için tüm soruları cevapla! 🌸")
         else:
             with st.spinner("Arşivler taranıyor, film makaraları dönüyor... 🎞️"):
                 try:
                     client = genai.Client(api_key=GEMINI_API_KEY)
-                    if "Kadın" in cinsiyet:
-                        havuz = "Türkan Şoray, Fatma Girik, Filiz Akın, Hülya Koçyiğit"
-                        resim_kodlari = "TURKAN, FATMA, FILIZ, HULYA"
-                    else:
-                        havuz = "Kadir İnanır, Tarık Akan, Cüneyt Arkın, Kemal Sunal"
-                        resim_kodlari = "KADIR, TARIK, CUNEYT, KEMAL"
+                    havuz = "Türkan Şoray, Fatma Girik, Filiz Akın, Hülya Koçyiğit" if "Kadın" in cinsiyet else "Kadir İnanır, Tarık Akan, Cüneyt Arkın, Kemal Sunal"
+                    resim_kodlari = "TURKAN, FATMA, FILIZ, HULYA" if "Kadın" in cinsiyet else "KADIR, TARIK, CUNEYT, KEMAL"
 
-                    prompt = f"""
-                    Kullanıcı ({cinsiyet}) bir Yeşilçam testi çözdü. Cevapları: {cevaplar_1}
-                    Bu cevaplara göre onu şu havuzdan bir karakterle eşleştir: {havuz}
-                    TON: Nostaljik, övücü, sıcak bir Yeşilçam sunucusu gibi konuş.
-                    SATIR 1: Sadece seçtiğin karakterin resim kodunu yaz ({resim_kodlari} bunlardan biri).
-                    SATIR 2: Facebook postu metnini yaz (Emojili başlık, övücü açıklama, davet cümlesi).
-                    """
+                    prompt = f"Kullanıcı ({cinsiyet}) cevapları: {cevaplar_1}. Onu {havuz} havuzundan eşleştir.\nTON: Nostaljik Yeşilçam sunucusu.\nSATIR 1: Sadece resim kodu ({resim_kodlari}).\nSATIR 2: Sosyal medya metni (Övücü, kısa)."
                     res = client.models.generate_content(model='gemini-2.5-flash', contents=[prompt])
                     
-                    tam_cevap = res.text.strip()
-                    resim_kodu, facebook_metni = tam_cevap.split('\n', 1)
-                    resim_kodu = resim_kodu.strip()
-
+                    resim_kodu, facebook_metni = res.text.strip().split('\n', 1)
+                    
+                    # BÜTÜN JÖN VE SULTAN LİNKLERİ BURAYA EKLENDİ
                     jon_sultan_links = {
-                        "TURKAN": "https://i.pinimg.com/736x/a2/df/a3/a2dfa35e0257324ce218254d84b32edc.jpg", 
+                        "TURKAN": "https://i.pinimg.com/736x/a2/df/a3/a2dfa35e0257324ce218254d84b32edc.jpg",
                         "FATMA": "https://i.pinimg.com/736x/8b/19/f4/8b19f4a574fac6f52e3854f2a060a857.jpg",
                         "FILIZ": "https://i.pinimg.com/736x/a0/20/44/a02044b48d9db9d5014771398b985493.jpg",
                         "HULYA": "https://i.pinimg.com/736x/27/1f/88/271f88d8bba07d94118e51585e74ad92.jpg",
@@ -216,99 +137,15 @@ with tab1:
                     }
                     
                     st.success("İşte Ruhundaki Yeşilçam Efsanesi! 🎉")
-                    if resim_kodu in jon_sultan_links:
-                        try: st.image(jon_sultan_links[resim_kodu])
-                        except: st.warning("Görsel yüklenemedi. Linki kontrol edin.")
-                    st.info(facebook_metni.strip())
-                    st.markdown("**👇 Sonucunu Facebook'ta paylaş, arkadaşlarını davet et!**")
+                    if resim_kodu.strip() in jon_sultan_links:
+                        try: st.image(jon_sultan_links[resim_kodu.strip()])
+                        except: pass
                     
+                    st.info(facebook_metni.strip())
+                    paylasim_butonlari_olustur(facebook_metni.strip())
                     del st.session_state['selected_questions_1']
-                except Exception as e: st.error(f"Takılma oldu: {e}")
+                except Exception as e: st.error("Bir takılma oldu, lütfen tekrar dene!")
 
-# --- TAB 2 ---
 with tab2:
     st.markdown("<h3 style='text-align: center; color: #ffe0b3;'>Gazozuna İlaç Atan Mı, Herkesi Güldüren Mi?</h3>", unsafe_allow_html=True)
-    kategori_2 = st.radio("İçindeki hangi gücü keşfetmek istersin?", ["👿 İçimdeki Kötü Karakter", "😂 Komedi Efsanesi"], horizontal=True, key="kategori_2")
-    st.markdown("---")
-
-    if 'selected_questions_2' not in st.session_state:
-        st.session_state['selected_questions_2'] = random.sample(kotu_komedi_pool, 3)
-    
-    selected_questions_2 = st.session_state['selected_questions_2']
-    
-    cevaplar_2 = []
-    for i, q in enumerate(selected_questions_2):
-        c = st.radio(q["q"], q["c"], index=None, key=f"q2_{i}")
-        if c: cevaplar_2.append(c)
-
-    st.markdown("---")
-    
-    if st.button("👿 Ruhumdaki Kötüyü/Komedyeni Göster 😂", key="btn_2"):
-        if not cevaplar_2:
-            st.warning("Lütfen tüm soruları cevapla!")
-        else:
-            with st.spinner("Sinsi planlar/kahkahalar taranıyor... 🎞️"):
-                try:
-                    client = genai.Client(api_key=GEMINI_API_KEY)
-                    if "Kötü" in kategori_2:
-                        havuz = "Erol Taş, Nuri Alço, Aliye Rona, Önder Somer"
-                        resim_kodlari = "EROL, NURI, ALIYE, ONDER"
-                    else:
-                        havuz = "Adile Naşit, Şener Şen, Münir Özkul, Kemal Sunal"
-                        resim_kodlari = "ADILE, SENER, MUNIR, KEMAL_K"
-
-                    prompt = f"""
-                    Kullanıcı bir Yeşilçam kişilik testi çözdü. Kategori: {kategori_2}. Cevapları: {cevaplar_2}
-                    Bu cevaplara göre onu şu havuzdan bir karakterle eşleştir: {havuz}
-                    TON: Eğer Kötüyse hafif sinsi ve hayran, Komedyense neşeli ve övücü konuş.
-                    SATIR 1: Sadece seçtiğin karakterin resim kodunu yaz ({resim_kodlari} bunlardan biri).
-                    SATIR 2: Facebook postu metnini yaz (Emojili başlık, açıklama, davet).
-                    """
-                    res = client.models.generate_content(model='gemini-2.5-flash', contents=[prompt])
-                    
-                    tam_cevap = res.text.strip()
-                    resim_kodu, facebook_metni = tam_cevap.split('\n', 1)
-                    resim_kodu = resim_kodu.strip()
-
-                    kotu_komedi_links = {
-                        "EROL": "https://i.pinimg.com/736x/5b/29/19/5b29199f8d9848a6c91cb931c6d12fd4.jpg",
-                        "NURI": "https://i.pinimg.com/736x/60/f4/b9/60f4b91d2927111f3feb64f705b7f10c.jpg",
-                        "ALIYE": "https://i.pinimg.com/736x/8a/6b/0c/8a6b0c445a325b83170b025a3e9a116a.jpg",
-                        "ONDER": "https://i.pinimg.com/1200x/1c/a9/50/1ca950e45eb1b5b8ae5ef05529d8cac5.jpg",
-                        "ADILE": "https://i.pinimg.com/736x/6c/5c/f4/6c5cf45c657fe414d89cdfdfe0894694.jpg",
-                        "SENER": "https://i.pinimg.com/736x/4d/06/4a/4d064aa29c91493109945dc42619d12b.jpg",
-                        "MUNIR": "https://i.pinimg.com/736x/06/3f/cb/063fcb34e08f1b279bde0bfe63887e16.jpg",
-                        "KEMAL_K": "https://i.pinimg.com/736x/a5/8f/3f/a58f3f23c551da185babe810db58bdf8.jpg" 
-                    }
-                    
-                    st.success("İşte Ruhundaki Yeşilçam Karakteri! 🎉")
-                    if resim_kodu in kotu_komedi_links:
-                        try: st.image(kotu_komedi_links[resim_kodu])
-                        except: st.warning("Görsel yüklenemedi. Linki kontrol edin.")
-                    st.info(facebook_metni.strip())
-                    st.markdown("**👇 Sonucunu Facebook'ta paylaş, arkadaşlarını davet et!**")
-                    
-                    del st.session_state['selected_questions_2']
-                except Exception as e: st.error(f"Takılma oldu: {e}")
-
-# --- TAB 3 ---
-with tab3:
-    st.markdown("<h3 style='text-align: center; color: #ffe0b3;'>Bugün Film Makaraları Senin İçin Ne Diyor?</h3>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #ffe0b3;'>Fincan kapatmaya gerek yok! Her sabah gel, Yeşilçam'ın efsanevi replikleriyle bugünkü tavsiyeni al. WhatsApp gruplarında paylaşmayı unutma! 🌸</p>", unsafe_allow_html=True)
-    st.markdown("---")
-
-    if st.button("🥠 Bugünkü Yeşilçam Falımı Çek 🥠", key="btn_falcibaci"):
-        with st.spinner("Fincanına bakılıyor... Ay yok, film makaraları dönüyor... 🎞️"):
-            secilen_fal = random.choice(replik_fali_pool)
-            
-            st.markdown(f"""
-            <div style='background-color: #33001a; border: 4px solid #ffcc00; border-radius: 20px; padding: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);'>
-                <h2 style='color: #ffcc00 !important; font-style: italic; font-size: 30px !important; margin-bottom: 20px;'>💬 "{secilen_fal["r"]}"</h2>
-                <hr style='border: 1px solid #ff3399;'>
-                <p style='color: #ffe0b3 !important; font-size: 22px !important; line-height: 1.5;'>✨ Bugünkü Tavsiyen:</p>
-                <p style='color: white !important; font-size: 24px !important; font-weight: bold;'>{secilen_fal["t"]}</p>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            st.markdown("---")
-            st.markdown("**👇 Bu harika falı kopyalayıp WhatsApp grubundaki arkadaşlarına gönder, onlar da fallarını baksın!**")
+    kategori_2 = st.radio("İçindeki hangi gücü keşfetmek istersin?", ["👿 İçimdeki Kötü Karakter", "😂 Komedi Efsanesi"], horizontal=True,
