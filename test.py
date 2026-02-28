@@ -3,7 +3,7 @@ from google import genai
 import random
 
 # ==========================================
-# PART 1: ULTRA ALBENİLİ NOSTALJİK TASARIM (CSS)
+# PART 1: ULTRA ALBENİLİ NOSTALJİK TASARIM (CSS) - GÜNCELLEME
 # ==========================================
 st.set_page_config(page_title="Yeşilçam Eğlence Merkezi", page_icon="🎬", layout="centered")
 
@@ -36,7 +36,7 @@ h2, h3, h4 {
     text-align: center;
 }
 
-/* 4. SEKMELERİN (TABS) ALBENİLİ TASARIMI */
+/* 4. SEKMELERİN (TABS) SIGHTIRILMIŞ VE ALBENİLİ TASARIMI (GÜNCELLEME) */
 /* Aktif olmayan sekmeler */
 button[data-baseweb="tab"] {
     background-color: #4d0026 !important; /* Koyu bordo */
@@ -44,9 +44,10 @@ button[data-baseweb="tab"] {
     border-radius: 10px 10px 0 0 !important;
     border: 2px solid #ff3399 !important;
     margin-right: 5px;
-    padding: 10px 20px !important;
-    font-size: 22px !important;
+    padding: 10px 10px !important; /* YATAY DOLGUYUZU AZALTTIK (20px idi) */
+    font-size: 20px !important; /* Yazı boyutunu hafifçe küçülttük (22px idi) */
     font-weight: bold !important;
+    white-space: wrap !important; /* METNİN KAYDIRILMASINA İZİN VERDİK */
 }
 /* Aktif olan sekme */
 button[data-baseweb="tab"][aria-selected="true"] {
@@ -110,7 +111,7 @@ GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 
 # A. Klasik Test (Jön/Sultan) Soru Havuzu (15 Soru)
 jon_sultan_pool = [
-    {"q": "Bir haksızlık gördüğünde ne yaparsın? 👊", "c": ["Gözümü budaktan sakınmam, dalarım!", "Önce uyarır, güzellikle çözerim.", "Planımı yapar, akılla çözerim.", "Bana dokunmayan yılan bin yaşasın."]},
+    {"q": "Bir haksızlık gördüğünde ne yaparsın? 👊", "c": ["Gözümü budaktan sakınmam, dalarım!", "Önce uyarır, güzellikle çözmeye çalışırım.", "Planımı yapar, akılla çözerim.", "Bana dokunmayan yılan bin yaşasın."]},
     {"q": "Pazar sabahı evdeki halin nasıldır? ☀️", "c": ["Herkese mükellef bir sofra hazırlarım.", "Kahvemi içer, keyfime bakarım.", "Hemen işlere girişirim, hamaratım!", "Süslenir püslenir, kendime bakarım."]},
     {"q": "Aşk hayatında nasıl birisin? 🌹", "c": ["Sevdim mi tam severim, gözüm başkasını görmez!", "Romantiğimdir, şiirler okur, jestler yaparım.", "Çapkınlık ruhumda var ama belli etmem.", "Kader kısmet der, akışına bırakırım."]},
     {"q": "Altın gününde/arkadaş ortamında sen kimsin? ☕", "c": ["Dert dinleyen, akıl veren ablayım/abiyim.", "En şık giyinen ve en asil duranım.", "Haksızlığa gelemeyen, dobralığıyla bilinenim.", "Ortamın neşe kaynağıyım."]},
@@ -201,14 +202,14 @@ with tab1:
                     # --- LINK MERKEZİ (JÖN/SULTAN) ---
                     # Pinterest'ten kopyaladığınız resim adreslerini aşağıdaki tırnakların içine yapıştırın
                     jon_sultan_links = {
-                        "TURKAN": "https://i.pinimg.com/736x/a2/df/a3/a2dfa35e0257324ce218254d84b32edc.jpg",
-                        "FATMA": "https://i.pinimg.com/736x/8b/19/f4/8b19f4a574fac6f52e3854f2a060a857.jpg",
-                        "FILIZ": "https://i.pinimg.com/736x/a0/20/44/a02044b48d9db9d5014771398b985493.jpg",
-                        "HULYA": "https://i.pinimg.com/736x/27/1f/88/271f88d8bba07d94118e51585e74ad92.jpg",
-                        "KADIR": "https://i.pinimg.com/736x/1c/15/ba/1c15ba970ee745a0493906c83b6e153b.jpg",
-                        "TARIK": "https://i.pinimg.com/1200x/86/58/6a/86586ae7f9e912bf9247fca2b6be3724.jpg",
-                        "CUNEYT": "https://i.pinimg.com/736x/c2/b4/cc/c2b4cc0733f8e40cd62935d79415c1e6.jpg",
-                        "KEMAL": "https://i.pinimg.com/736x/a5/8f/3f/a58f3f23c551da185babe810db58bdf8.jpg"
+                        "TURKAN": "https://i.pinimg.com/736k/7a/df/bd/7adfbd7976e1a2f6460144f80879c298.jpg", # Örnek Link
+                        "FATMA": "BURAYA_FATMA_GIRIK_LINKINI_YAPISTIRIN",
+                        "FILIZ": "BURAYA_FILIZ_AKIN_LINKINI_YAPISTIRIN",
+                        "HULYA": "BURAYA_HULYA_KOCYIGIT_LINKINI_YAPISTIRIN",
+                        "KADIR": "BURAYA_KADIR_INANIR_LINKINI_YAPISTIRIN",
+                        "TARIK": "BURAYA_TARIK_AKAN_LINKINI_YAPISTIRIN",
+                        "CUNEYT": "BURAYA_CUNEYT_ARKIN_LINKINI_YAPISTIRIN",
+                        "KEMAL": "BURAYA_KEMAL_SUNAL_LINKINI_YAPISTIRIN"
                     }
                     
                     st.success("İşte Ruhundaki Yeşilçam Efsanesi! 🎉")
