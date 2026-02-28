@@ -124,7 +124,6 @@ with tab1:
                     
                     resim_kodu, facebook_metni = res.text.strip().split('\n', 1)
                     
-                    # BÜTÜN JÖN VE SULTAN LİNKLERİ BURAYA EKLENDİ
                     jon_sultan_links = {
                         "TURKAN": "https://i.pinimg.com/736x/a2/df/a3/a2dfa35e0257324ce218254d84b32edc.jpg",
                         "FATMA": "https://i.pinimg.com/736x/8b/19/f4/8b19f4a574fac6f52e3854f2a060a857.jpg",
@@ -148,4 +147,68 @@ with tab1:
 
 with tab2:
     st.markdown("<h3 style='text-align: center; color: #ffe0b3;'>Gazozuna İlaç Atan Mı, Herkesi Güldüren Mi?</h3>", unsafe_allow_html=True)
-    kategori_2 = st.radio("İçindeki hangi gücü keşfetmek istersin?", ["👿 İçimdeki Kötü Karakter", "😂 Komedi Efsanesi"], horizontal=True,
+    
+    # İŞTE O YARIM KALAN VE DÜZELTİLEN SATIR:
+    kategori_2 = st.radio("İçindeki hangi gücü keşfetmek istersin?", ["👿 İçimdeki Kötü Karakter", "😂 Komedi Efsanesi"], horizontal=True, key="kategori_2")
+    
+    if 'selected_questions_2' not in st.session_state: st.session_state['selected_questions_2'] = random.sample(kotu_komedi_pool, 2)
+    
+    cevaplar_2 = []
+    for i, q in enumerate(st.session_state['selected_questions_2']):
+        c = st.radio(q["q"], q["c"], index=None, key=f"q2_{i}")
+        if c: cevaplar_2.append(c)
+
+    st.markdown("---")
+    if st.button("👿 Ruhumdaki Karakteri Göster 😂", key="btn_2"):
+        if not cevaplar_2: st.warning("Lütfen tüm soruları cevapla!")
+        else:
+            with st.spinner("Sinsi planlar/kahkahalar taranıyor... 🎞️"):
+                try:
+                    client = genai.Client(api_key=GEMINI_API_KEY)
+                    havuz = "Erol Taş, Nuri Alço, Aliye Rona, Önder Somer" if "Kötü" in kategori_2 else "Adile Naşit, Şener Şen, Münir Özkul, Kemal Sunal"
+                    resim_kodlari = "EROL, NURI, ALIYE, ONDER" if "Kötü" in kategori_2 else "ADILE, SENER, MUNIR, KEMAL"
+
+                    prompt = f"Kategori: {kategori_2}. Cevapları: {cevaplar_2}. {havuz} havuzundan seç.\nSATIR 1: Resim kodu ({resim_kodlari}).\nSATIR 2: Sosyal medya metni."
+                    res = client.models.generate_content(model='gemini-2.5-flash', contents=[prompt])
+                    
+                    resim_kodu, facebook_metni = res.text.strip().split('\n', 1)
+                    
+                    kotu_komedi_links = {
+                        "EROL": "https://i.pinimg.com/736x/5b/29/19/5b29199f8d9848a6c91cb931c6d12fd4.jpg",
+                        "NURI": "https://i.pinimg.com/736x/60/f4/b9/60f4b91d2927111f3feb64f705b7f10c.jpg",
+                        "ALIYE": "https://i.pinimg.com/736x/8a/6b/0c/8a6b0c445a325b83170b025a3e9a116a.jpg",
+                        "ONDER": "https://i.pinimg.com/1200x/1c/a9/50/1ca950e45eb1b5b8ae5ef05529d8cac5.jpg",
+                        "ADILE": "https://i.pinimg.com/736x/6c/5c/f4/6c5cf45c657fe414d89cdfdfe0894694.jpg",
+                        "SENER": "https://i.pinimg.com/736x/4d/06/4a/4d064aa29c91493109945dc42619d12b.jpg",
+                        "MUNIR": "https://i.pinimg.com/736x/06/3f/cb/063fcb34e08f1b279bde0bfe63887e16.jpg",
+                        "KEMAL": "https://i.pinimg.com/736x/a5/8f/3f/a58f3f23c551da185babe810db58bdf8.jpg"
+                    }
+                    
+                    st.success("İşte Ruhundaki Yeşilçam Karakteri! 🎉")
+                    if resim_kodu.strip() in kotu_komedi_links:
+                        try: st.image(kotu_komedi_links[resim_kodu.strip()])
+                        except: pass
+                    
+                    st.info(facebook_metni.strip())
+                    paylasim_butonlari_olustur(facebook_metni.strip())
+                    del st.session_state['selected_questions_2']
+                except Exception as e: st.error("Bir takılma oldu, lütfen tekrar dene!")
+
+with tab3:
+    st.markdown("<h3 style='text-align: center; color: #ffe0b3;'>Bugün Film Makaraları Senin İçin Ne Diyor?</h3>", unsafe_allow_html=True)
+    if st.button("🥠 Bugünkü Yeşilçam Falımı Çek 🥠", key="btn_falcibaci"):
+        with st.spinner("Film makaraları dönüyor... 🎞️"):
+            secilen_fal = random.choice(replik_fali_pool)
+            
+            fal_metni = f"💬 \"{secilen_fal['r']}\"\n\n✨ Tavsiyen: {secilen_fal['t']}"
+            
+            st.markdown(f"""
+            <div style='background-color: #33001a; border: 4px solid #ffcc00; border-radius: 20px; padding: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);'>
+                <h2 style='color: #ffcc00 !important; font-style: italic; font-size: 30px !important; margin-bottom: 20px;'>💬 "{secilen_fal["r"]}"</h2>
+                <hr style='border: 1px solid #ff3399;'>
+                <p style='color: #ffe0b3 !important; font-size: 22px !important; line-height: 1.5;'>✨ Bugünkü Tavsiyen:</p>
+                <p style='color: white !important; font-size: 24px !important; font-weight: bold;'>{secilen_fal["t"]}</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            paylasim_butonlari_olustur(f"Bugünkü Yeşilçam Falımı çektim:\n{fal_metni}")
