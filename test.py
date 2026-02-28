@@ -41,7 +41,7 @@ img { display: block; margin-left: auto; margin-right: auto; width: 90%; border-
 /* KUTULAR */
 .stAlert { background-color: #33001a !important; border: 2px solid #ff3399 !important; border-radius: 15px; color: #ffe0b3 !important; }
 
-/* PAYLAŞ BUTONLARI İÇİN ÖZEL TASARIM */
+/* PAYLAŞ BUTONLARI */
 .share-btn { display: inline-block; width: 48%; text-align: center; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 18px; text-decoration: none !important; margin-top: 10px; color: white !important; }
 .fb-btn { background-color: #1877F2; border: 2px solid #0d5bb5; }
 .wa-btn { background-color: #25D366; border: 2px solid #1da851; float: right; }
@@ -119,10 +119,11 @@ with tab1:
                     havuz = "Türkan Şoray, Fatma Girik, Filiz Akın, Hülya Koçyiğit" if "Kadın" in cinsiyet else "Kadir İnanır, Tarık Akan, Cüneyt Arkın, Kemal Sunal"
                     resim_kodlari = "TURKAN, FATMA, FILIZ, HULYA" if "Kadın" in cinsiyet else "KADIR, TARIK, CUNEYT, KEMAL"
 
-                    prompt = f"Kullanıcı ({cinsiyet}) cevapları: {cevaplar_1}. Onu {havuz} havuzundan eşleştir.\nTON: Nostaljik Yeşilçam sunucusu.\nSATIR 1: Sadece resim kodu ({resim_kodlari}).\nSATIR 2: Sosyal medya metni (Övücü, kısa)."
+                    prompt = f"Kullanıcı ({cinsiyet}) cevapları: {cevaplar_1}. Onu {havuz} havuzundan eşleştir.\nTON: Nostaljik Yeşilçam sunucusu.\nSATIR 1: Sadece ve sadece resim kodunu yaz ({resim_kodlari}). Başka kelime ekleme.\nSATIR 2: Sosyal medya metni."
                     res = client.models.generate_content(model='gemini-2.5-flash', contents=[prompt])
                     
-                    resim_kodu, facebook_metni = res.text.strip().split('\n', 1)
+                    resim_kodu_ham, facebook_metni = res.text.strip().split('\n', 1)
+                    resim_kodu_ham = resim_kodu_ham.upper()
                     
                     jon_sultan_links = {
                         "TURKAN": "https://i.pinimg.com/736x/a2/df/a3/a2dfa35e0257324ce218254d84b32edc.jpg",
@@ -135,9 +136,16 @@ with tab1:
                         "KEMAL": "https://i.pinimg.com/736x/a5/8f/3f/a58f3f23c551da185babe810db58bdf8.jpg"
                     }
                     
+                    # KELİME AVCISI (Yapay zeka süslü yazsa bile kodu cımbızlar)
+                    bulunan_kod = None
+                    for k in jon_sultan_links.keys():
+                        if k in resim_kodu_ham:
+                            bulunan_kod = k
+                            break
+                    
                     st.success("İşte Ruhundaki Yeşilçam Efsanesi! 🎉")
-                    if resim_kodu.strip() in jon_sultan_links:
-                        try: st.image(jon_sultan_links[resim_kodu.strip()])
+                    if bulunan_kod:
+                        try: st.image(jon_sultan_links[bulunan_kod])
                         except: pass
                     
                     st.info(facebook_metni.strip())
@@ -147,8 +155,6 @@ with tab1:
 
 with tab2:
     st.markdown("<h3 style='text-align: center; color: #ffe0b3;'>Gazozuna İlaç Atan Mı, Herkesi Güldüren Mi?</h3>", unsafe_allow_html=True)
-    
-    # İŞTE O YARIM KALAN VE DÜZELTİLEN SATIR:
     kategori_2 = st.radio("İçindeki hangi gücü keşfetmek istersin?", ["👿 İçimdeki Kötü Karakter", "😂 Komedi Efsanesi"], horizontal=True, key="kategori_2")
     
     if 'selected_questions_2' not in st.session_state: st.session_state['selected_questions_2'] = random.sample(kotu_komedi_pool, 2)
@@ -168,10 +174,11 @@ with tab2:
                     havuz = "Erol Taş, Nuri Alço, Aliye Rona, Önder Somer" if "Kötü" in kategori_2 else "Adile Naşit, Şener Şen, Münir Özkul, Kemal Sunal"
                     resim_kodlari = "EROL, NURI, ALIYE, ONDER" if "Kötü" in kategori_2 else "ADILE, SENER, MUNIR, KEMAL"
 
-                    prompt = f"Kategori: {kategori_2}. Cevapları: {cevaplar_2}. {havuz} havuzundan seç.\nSATIR 1: Resim kodu ({resim_kodlari}).\nSATIR 2: Sosyal medya metni."
+                    prompt = f"Kategori: {kategori_2}. Cevapları: {cevaplar_2}. {havuz} havuzundan seç.\nSATIR 1: Sadece ve sadece resim kodunu yaz ({resim_kodlari}). Başka kelime ekleme.\nSATIR 2: Sosyal medya metni."
                     res = client.models.generate_content(model='gemini-2.5-flash', contents=[prompt])
                     
-                    resim_kodu, facebook_metni = res.text.strip().split('\n', 1)
+                    resim_kodu_ham, facebook_metni = res.text.strip().split('\n', 1)
+                    resim_kodu_ham = resim_kodu_ham.upper()
                     
                     kotu_komedi_links = {
                         "EROL": "https://i.pinimg.com/736x/5b/29/19/5b29199f8d9848a6c91cb931c6d12fd4.jpg",
@@ -184,9 +191,16 @@ with tab2:
                         "KEMAL": "https://i.pinimg.com/736x/a5/8f/3f/a58f3f23c551da185babe810db58bdf8.jpg"
                     }
                     
+                    # KELİME AVCISI 
+                    bulunan_kod = None
+                    for k in kotu_komedi_links.keys():
+                        if k in resim_kodu_ham:
+                            bulunan_kod = k
+                            break
+                            
                     st.success("İşte Ruhundaki Yeşilçam Karakteri! 🎉")
-                    if resim_kodu.strip() in kotu_komedi_links:
-                        try: st.image(kotu_komedi_links[resim_kodu.strip()])
+                    if bulunan_kod:
+                        try: st.image(kotu_komedi_links[bulunan_kod])
                         except: pass
                     
                     st.info(facebook_metni.strip())
@@ -199,7 +213,6 @@ with tab3:
     if st.button("🥠 Bugünkü Yeşilçam Falımı Çek 🥠", key="btn_falcibaci"):
         with st.spinner("Film makaraları dönüyor... 🎞️"):
             secilen_fal = random.choice(replik_fali_pool)
-            
             fal_metni = f"💬 \"{secilen_fal['r']}\"\n\n✨ Tavsiyen: {secilen_fal['t']}"
             
             st.markdown(f"""
