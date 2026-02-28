@@ -1,26 +1,22 @@
 import streamlit as st
 from google import genai
 
-# --- 1. HERKES İÇİN NOSTALJİK TASARIM (Koyu Yazı Düzeltmeli) ---
+# --- 1. HERKES İÇİN NOSTALJİK TASARIM ---
 st.set_page_config(page_title="Yeşilçam Efsane Testi", page_icon="🎬", layout="centered")
 
 st.markdown("""
 <style>
-.stApp {
-    background-color: #FFF0F5; /* Tatlı pembe arka plan */
-}
-/* Tüm yazıları koyu renk ve büyük yap */
+.stApp { background-color: #FFF0F5; }
 html, body, [class*="st-"], p, div, label, h1, h2, h3 {
     font-size: 22px !important; 
     font-family: 'Georgia', serif;
     color: #333333 !important; 
 }
 h1 {
-    color: #C71585 !important; /* Başlık rengi */
+    color: #C71585 !important;
     text-align: center;
     font-size: 36px !important;
 }
-/* Buton tasarımı */
 .stButton>button {
     width: 100%; 
     border-radius: 15px; 
@@ -30,7 +26,6 @@ h1 {
     color: white !important;
     padding: 15px;
 }
-/* Görselleri ortala ve çerçevele */
 img {
     display: block;
     margin-left: auto;
@@ -54,18 +49,16 @@ st.markdown("#### Önce bir tanıyalım seni...")
 cinsiyet = st.radio("", ["👩 Sultanım (Kadın)", "👨 Jönüm (Erkek)"], horizontal=True)
 st.markdown("---")
 
-# --- 3. SORULAR (CİNSİYETE GÖRE DEĞİŞİR) ---
 cevaplar = []
 
 if cinsiyet == "👩 Sultanım (Kadın)":
-    # --- KADIN SORULARI ---
     s1 = st.radio("1. Pazar sabahı evdeki halin nasıldır? ☀️", [
         "Herkese mükellef bir sofra hazırlarım. (Anaç)",
         "Kahvemi içer, keyfime bakarım. (Zarif)",
         "Hemen işlere girişirim, hamaratım! (Pratik)",
         "Süslenir püslenir, kendime bakarım. (Havalı)"
     ], index=None)
-    s2 = st.radio("2. Altın gününde (arkadaş ortamında) sen kimsin? ☕", [
+    s2 = st.radio("2. Altın gününde sen kimsin? ☕", [
         "Dert dinleyen, akıl veren ablayım.",
         "En şık giyinen ve en asil duranım.",
         "Haksızlığa gelemeyen, lafını esirgemeyenim.",
@@ -80,7 +73,6 @@ if cinsiyet == "👩 Sultanım (Kadın)":
     if s1 and s2 and s3: cevaplar = [s1, s2, s3]
 
 elif cinsiyet == "👨 Jönüm (Erkek)":
-    # --- ERKEK SORULARI (YENİ!) ---
     s1 = st.radio("1. Bir haksızlık gördüğünde ne yaparsın? 👊", [
         "Gözümü budaktan sakınmam, dalarım! (Cesur)",
         "Önce uyarır, güzellikle çözmeye çalışırım. (Babacan)",
@@ -103,7 +95,6 @@ elif cinsiyet == "👨 Jönüm (Erkek)":
 
 st.markdown("---")
 
-# --- 4. SONUÇ BUTONU, GÖRSEL VE YAPAY ZEKA ---
 if st.button("✨ Sonucumu Göster ✨"):
     if not cevaplar:
         st.warning("Aman canım, sonucu görmek için tüm soruları cevapla! 🌸")
@@ -112,7 +103,6 @@ if st.button("✨ Sonucumu Göster ✨"):
             try:
                 client = genai.Client(api_key=GEMINI_API_KEY)
                 
-                # Hangi karakter havuzundan seçeceğini belirliyoruz
                 if "Kadın" in cinsiyet:
                     havuz = "Türkan Şoray, Fatma Girik, Filiz Akın, Hülya Koçyiğit"
                     resim_kodlari = "TURKAN, FATMA, FILIZ, HULYA"
@@ -133,28 +123,34 @@ if st.button("✨ Sonucumu Göster ✨"):
                 
                 res = client.models.generate_content(model='gemini-2.5-flash', contents=[prompt])
                 
-                # Yapay zekadan gelen cevabı "Resim Kodu" ve "Metin" olarak ikiye ayırıyoruz
                 tam_cevap = res.text.strip()
                 resim_kodu, facebook_metni = tam_cevap.split('\n', 1)
                 resim_kodu = resim_kodu.strip()
 
-                # --- GÖRSELİ GÖSTERME KISMI ---
-                # Kod ile dosya ismi eşleştirmesi
+                # --- İŞTE YENİ LİNK SİSTEMİ (İNDİRME YOK!) ---
+                # İnternetten kopyaladığınız resim adreslerini aşağıdaki tırnakların içine yapıştırın
                 resim_haritasi = {
-                    "TURKAN": "turkan.jpg", "FATMA": "fatma.jpg", "FILIZ": "filiz.jpg", "HULYA": "hulya.jpg",
-                    "KADIR": "kadir.jpg", "TARIK": "tarik.jpg", "CUNEYT": "cuneyt.jpg", "KEMAL": "kemal.jpg"
+                    "TURKAN": "https://i.pinimg.com/736x/a2/df/a3/a2dfa35e0257324ce218254d84b32edc.jpg",
+                    "FATMA": "https://i.pinimg.com/736x/8b/19/f4/8b19f4a574fac6f52e3854f2a060a857.jpg",
+                    "FILIZ": "https://i.pinimg.com/736x/a0/20/44/a02044b48d9db9d5014771398b985493.jpg",
+                    "HULYA": "https://i.pinimg.com/736x/27/1f/88/271f88d8bba07d94118e51585e74ad92.jpg",
+                    "KADIR": "https://i.pinimg.com/736x/1c/15/ba/1c15ba970ee745a0493906c83b6e153b.jpg",
+                    "TARIK": "https://i.pinimg.com/1200x/86/58/6a/86586ae7f9e912bf9247fca2b6be3724.jpg",
+                    "CUNEYT": "https://i.pinimg.com/736x/c2/b4/cc/c2b4cc0733f8e40cd62935d79415c1e6.jpg",
+                    "KEMAL": "https://i.pinimg.com/736x/a5/8f/3f/a58f3f23c551da185babe810db58bdf8.jpg"
                 }
                 
                 st.success("İşte Ruhundaki Yeşilçam Efsanesi! 🎉")
                 
-                # Eğer doğru bir kod geldiyse resmi göster
+                # İnternetteki linkten fotoğrafı doğrudan ekrana basıyoruz
                 if resim_kodu in resim_haritasi:
-                    # GitHub'a yüklediğiniz resim dosyasını ekrana basar
-                    st.image(resim_haritasi[resim_kodu])
+                    try:
+                        st.image(resim_haritasi[resim_kodu])
+                    except:
+                        st.warning("Görsel yüklenemedi. Lütfen koda eklediğiniz resim linkini kontrol edin.")
                 
-                # Metni göster
                 st.info(facebook_metni.strip())
                 st.markdown("**👇 Sonucunu Facebook'ta paylaş, arkadaşlarını da teste davet et!**")
                 
             except Exception as e:
-                st.error(f"Hata oluştu (Belki de resim dosyaları eksiktir?): {e}")
+                st.error(f"Sistemde ufak bir takılma oldu: {e}")
