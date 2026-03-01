@@ -41,7 +41,7 @@ img { display: block; margin-left: auto; margin-right: auto; width: 90%; border-
 /* KUTULAR */
 .stAlert { background-color: #33001a !important; border: 2px solid #ff3399 !important; border-radius: 15px; color: #ffe0b3 !important; }
 
-/* PAYLAŞ BUTONLARI */
+/* PAYLAŞ BUTONLARI İÇİN ÖZEL TASARIM */
 .share-btn { display: inline-block; width: 48%; text-align: center; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 18px; text-decoration: none !important; margin-top: 10px; color: white !important; }
 .fb-btn { background-color: #1877F2; border: 2px solid #0d5bb5; }
 .wa-btn { background-color: #25D366; border: 2px solid #1da851; float: right; }
@@ -50,24 +50,27 @@ img { display: block; margin-left: auto; margin-right: auto; width: 90%; border-
 """, unsafe_allow_html=True)
 
 st.title("🎬 Yeşilçam Eğlence Merkezi")
-st.markdown("<h3 style='text-align: center; color: #ffe0b3;'>Hoş geldin sultanım/jönüm! Nostalji dolu bir yolculuğa hazır mısın? 💖</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color: #ffe0b3;'>Melek mi, Şeytan mı? Gerçek yüzünü bulmaya hazır mısın? 💖</h3>", unsafe_allow_html=True)
 st.markdown("---")
 
 GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 
 # ==========================================
-# PART 2: DATA VE HAVUZLAR
+# PART 2: YENİ, PSİKOLOJİK VE GERÇEKÇİ SORU HAVUZLARI
 # ==========================================
 jon_sultan_pool = [
-    {"q": "Bir haksızlık gördüğünde ne yaparsın? 👊", "c": ["Gözümü budaktan sakınmam, dalarım!", "Önce uyarır, güzellikle çözmeye çalışırım.", "Planımı yapar, akılla çözerim.", "Bana dokunmayan yılan bin yaşasın."]},
-    {"q": "Pazar sabahı evdeki halin nasıldır? ☀️", "c": ["Herkese mükellef bir sofra hazırlarım.", "Kahvemi içer, keyfime bakarım.", "Hemen işlere girişirim, hamaratım!", "Süslenir püslenir, kendime bakarım."]},
-    {"q": "Aşk hayatında nasıl birisin? 🌹", "c": ["Sevdim mi tam severim, gözüm başkasını görmez!", "Romantiğimdir, şiirler okur, jestler yaparım.", "Çapkınlık ruhumda var ama belli etmem.", "Kader kısmet der, akışına bırakırım."]},
-    {"q": "Altın gününde/arkadaş ortamında sen kimsin? ☕", "c": ["Dert dinleyen, akıl veren ablayım/abiyim.", "En şık giyinen ve en asil duranım.", "Haksızlığa gelemeyen, dobralığıyla bilinenim.", "Ortamın neşe kaynağıyım."]}
+    {"q": "Mahalleden biri arkandan atıp tutmuş, kulağına geldi. Ne yaparsın? 👂", "c": ["Yüzüne gülerim ama defterini sonsuza kadar dürmüşümdür. (Sinsi/Gururlu)", "Gider kapısına dayanır, 'Hayırdır inşallah?' diye hesap sorarım. (Dobra/Agresif)", "Hiç bozuntuya vermem, altın gününde lafı gediğine oturturum. (Zarif intikam)", "Umursamam ama içten içe günlerce kafama takar, sinir olurum. (Alıngan)"]},
+    {"q": "Aile içinde (veya gelin/damat/elti ile) bir şeye çok gıcık oldun. Tepkin ne olur? 🙄", "c": ["Surat asarım, buz gibi davranırım, tavrımdan anlasınlar. (Pasif-Agresif)", "Laf sokarım, anlarsa anlar, anlamazsa kendi bilir. (İğneleyici)", "Hiçbir şey demem ama gidip başkasına şikayet ederim. (Dedikoducu)", "Çat diye söylerim, içimde patlayacağına onda dert olsun. (Patavatsız)"]},
+    {"q": "Evde kimsenin pek bilmediği, en belirgin gizli huyun nedir? 🤫", "c": ["Her şey benim dediğim gibi olsun isterim, kontrolcüyüm.", "Kin tutarım, yapılan hatayı yıllar geçse de unutmam, yüzüne vururum.", "Dışarıdan sakin görünürüm ama kafamda hep senaryolar yazarım.", "Saman alevi gibiyimdir, aniden parlar ortalığı yıkarım, 5 dakika sonra pamuk gibi olurum."]},
+    {"q": "Yakın bir arkadaşın senden daha lüks/güzel bir şey aldı. İlk tepkin ne olur? 💎", "c": ["Güle güle kullansın derim ama içimden 'Keşke benim olsaydı' diye geçiririm.", "Hemen neresinde bir kusur var diye incelemeye başlarım.", "'Aman canım benimkiler bana yeter' diyerek kendimi avuturum.", "Hırs yaparım, en kısa zamanda aynısından veya daha iyisinden alırım."]}
 ]
+
 kotu_komedi_pool = [
-    {"q": "Planın tıkır tıkır işlerken ne hissedersin? 😏", "c": ["Sinsi sinsi gülerim, zafer benimdir! (Kötü)", "Herkesin mutlu olması beni de sevindirir. (Komedi)", "Daha fazlasını nasıl yaparım diye düşünürüm.", "Aman tıkırındaysa bozmayalım."]},
-    {"q": "Ortamda gerginlik varsa ne yaparsın? 💥", "c": ["Gerginliği ben tırmandırırım, kaos severim! (Kötü)", "Bir espri yapar, herkesi güldürürüm. (Komedi)", "Sessizce olay yerinden uzaklaşırım.", "Ara buluculuk yapmaya çalışırım."]}
+    {"q": "Kabul et, bazen kötü olmak çok zevkli! Yeşilçam'da bir kötü olsaydın imza hareketin ne olurdu? 😈", "c": ["Gözlerimi kısarak sinsi sinsi gülmek ve başkalarının kuyusunu kazmak.", "Gazozuna ilacı atıp (veya dedikoduyla) safları tuzağa düşürmek.", "Masaya yumruğu vurup 'Bu evlilik ASLA olmayacak!' diyerek ortalığı karıştırmak.", "Parayla herkesi ve her şeyi satın alabileceğimi düşünerek kibirle tepeden bakmak."]},
+    {"q": "Mahallede büyük bir kavga koptu ve aslında sen haksızsın. İşin içinden nasıl sıyrılırsın? 🎭", "c": ["Laf cambazlığıyla üste çıkar, haklıyı haksız duruma düşürürüm.", "Hemen acındırma politikası yapar, anında mağduru oynarım.", "Hiç çaktırmadan 'Ben yapmadım ki, o başlattı' diyerek suçu başkasına atarım.", "Umurumda bile olmaz, 'Yaptım, yine olsa yine yaparım!' der geçerim."]},
+    {"q": "Gıcık olduğun biri yolda ayağı takılıp düştü. İçinden ne geçer? 🤭", "c": ["Zar zor gülmemi tutarım, içimden 'İlahi adalet işte' derim.", "Gidip 'Ayy canım iyi misin?' derim ama aslında düşmesine bayılmışımdır.", "Gözünün içine baka baka kahkahayı patlatırım.", "Ben düşürmedim ama düşsün diye içimden geçirmiş olabilirim."]}
 ]
+
 replik_fali_pool = [
     {"r": "Benim adım Tatar Ramazan, ben bu oyunu bozarım!", "t": "Bugün önüne engeller çıkabilir. Dikkatli ol ama taviz verme."},
     {"r": "Sevgi neydi? Sevgi emekti.", "t": "Bugün ilişkilerinde sabırlı olman, emek vermen gerekecek."},
@@ -75,7 +78,7 @@ replik_fali_pool = [
 ]
 
 # ==========================================
-# PAYLAŞIM BUTONLARI OLUŞTURUCU FONKSİYON
+# PAYLAŞIM BUTONLARI
 # ==========================================
 def paylasim_butonlari_olustur(metin):
     hazir_mesaj = f"{metin}\n\nSen hangi efsanesin? Hemen testi çöz: {SITENIZIN_LINKI}"
@@ -99,7 +102,7 @@ def paylasim_butonlari_olustur(metin):
 tab1, tab2, tab3 = st.tabs(["🎭 Ruhundaki Jön/Sultan", "🦹‍♂️ Kötüler ve Komedyenler", "🥠 Günlük Replik Falı"])
 
 with tab1:
-    st.markdown("<h3 style='text-align: center; color: #ffe0b3;'>Efsanevi Bir Aşkın Kahramanı Mısın?</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; color: #ffe0b3;'>Gerçek Yüzünle Efsanevi Bir Kahraman Mısın?</h3>", unsafe_allow_html=True)
     cinsiyet = st.radio("Önce bir tanıyalım seni...", ["👩 Sultanım (Kadın)", "👨 Jönüm (Erkek)"], horizontal=True, key="cinsiyet_1")
     
     if 'selected_questions_1' not in st.session_state: st.session_state['selected_questions_1'] = random.sample(jon_sultan_pool, 3)
@@ -119,7 +122,7 @@ with tab1:
                     havuz = "Türkan Şoray, Fatma Girik, Filiz Akın, Hülya Koçyiğit" if "Kadın" in cinsiyet else "Kadir İnanır, Tarık Akan, Cüneyt Arkın, Kemal Sunal"
                     resim_kodlari = "TURKAN, FATMA, FILIZ, HULYA" if "Kadın" in cinsiyet else "KADIR, TARIK, CUNEYT, KEMAL"
 
-                    prompt = f"Kullanıcı ({cinsiyet}) cevapları: {cevaplar_1}. Onu {havuz} havuzundan eşleştir.\nTON: Nostaljik Yeşilçam sunucusu.\nSATIR 1: Sadece ve sadece resim kodunu yaz ({resim_kodlari}). Başka kelime ekleme.\nSATIR 2: Sosyal medya metni."
+                    prompt = f"Kullanıcı ({cinsiyet}) gerçekçi ve hafif kusurlu şıkların olduğu bir Yeşilçam testi çözdü. Cevapları: {cevaplar_1}. Onu bu psikolojik cevaplarına göre {havuz} havuzundan biriyle eşleştir.\nTON: Nostaljik Yeşilçam sunucusu gibi, onun o kusurlu/harbi yanını hafif mizahi bir dille öv.\nSATIR 1: Sadece ve sadece resim kodunu yaz ({resim_kodlari}). Başka kelime ekleme.\nSATIR 2: Sosyal medya metni."
                     res = client.models.generate_content(model='gemini-2.5-flash', contents=[prompt])
                     
                     resim_kodu_ham, facebook_metni = res.text.strip().split('\n', 1)
@@ -136,7 +139,6 @@ with tab1:
                         "KEMAL": "https://i.pinimg.com/736x/a5/8f/3f/a58f3f23c551da185babe810db58bdf8.jpg"
                     }
                     
-                    # KELİME AVCISI (Yapay zeka süslü yazsa bile kodu cımbızlar)
                     bulunan_kod = None
                     for k in jon_sultan_links.keys():
                         if k in resim_kodu_ham:
@@ -182,7 +184,7 @@ with tab2:
                     
                     kotu_komedi_links = {
                         "EROL": "https://i.pinimg.com/736x/5b/29/19/5b29199f8d9848a6c91cb931c6d12fd4.jpg",
-                        "NURI": "https://i.pinimg.com/1200x/02/6d/43/026d43f4c2e56bfe2f55f775b8cf73d1.jpg",
+                        "NURI": "https://i.pinimg.com/736x/60/f4/b9/60f4b91d2927111f3feb64f705b7f10c.jpg",
                         "ALIYE": "https://i.pinimg.com/736x/8a/6b/0c/8a6b0c445a325b83170b025a3e9a116a.jpg",
                         "ONDER": "https://i.pinimg.com/1200x/1c/a9/50/1ca950e45eb1b5b8ae5ef05529d8cac5.jpg",
                         "ADILE": "https://i.pinimg.com/736x/6c/5c/f4/6c5cf45c657fe414d89cdfdfe0894694.jpg",
@@ -191,7 +193,6 @@ with tab2:
                         "KEMAL": "https://i.pinimg.com/736x/a5/8f/3f/a58f3f23c551da185babe810db58bdf8.jpg"
                     }
                     
-                    # KELİME AVCISI 
                     bulunan_kod = None
                     for k in kotu_komedi_links.keys():
                         if k in resim_kodu_ham:
