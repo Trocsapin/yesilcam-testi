@@ -41,7 +41,7 @@ img { display: block; margin-left: auto; margin-right: auto; width: 90%; border-
 /* KUTULAR */
 .stAlert { background-color: #33001a !important; border: 2px solid #ff3399 !important; border-radius: 15px; color: #ffe0b3 !important; }
 
-/* PAYLAŞ BUTONLARI İÇİN ÖZEL TASARIM */
+/* PAYLAŞ BUTONLARI */
 .share-btn { display: inline-block; width: 48%; text-align: center; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 18px; text-decoration: none !important; margin-top: 10px; color: white !important; }
 .fb-btn { background-color: #1877F2; border: 2px solid #0d5bb5; }
 .wa-btn { background-color: #25D366; border: 2px solid #1da851; float: right; }
@@ -56,19 +56,18 @@ st.markdown("---")
 GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 
 # ==========================================
-# PART 2: YENİ, PSİKOLOJİK VE GERÇEKÇİ SORU HAVUZLARI
+# PART 2: SORU VE OYUN HAVUZLARI
 # ==========================================
 jon_sultan_pool = [
-    {"q": "Mahalleden biri arkandan atıp tutmuş, kulağına geldi. Ne yaparsın? 👂", "c": ["Yüzüne gülerim ama defterini sonsuza kadar dürmüşümdür. (Sinsi/Gururlu)", "Gider kapısına dayanır, 'Hayırdır inşallah?' diye hesap sorarım. (Dobra/Agresif)", "Hiç bozuntuya vermem, altın gününde lafı gediğine oturturum. (Zarif intikam)", "Umursamam ama içten içe günlerce kafama takar, sinir olurum. (Alıngan)"]},
-    {"q": "Aile içinde (veya gelin/damat/elti ile) bir şeye çok gıcık oldun. Tepkin ne olur? 🙄", "c": ["Surat asarım, buz gibi davranırım, tavrımdan anlasınlar. (Pasif-Agresif)", "Laf sokarım, anlarsa anlar, anlamazsa kendi bilir. (İğneleyici)", "Hiçbir şey demem ama gidip başkasına şikayet ederim. (Dedikoducu)", "Çat diye söylerim, içimde patlayacağına onda dert olsun. (Patavatsız)"]},
-    {"q": "Evde kimsenin pek bilmediği, en belirgin gizli huyun nedir? 🤫", "c": ["Her şey benim dediğim gibi olsun isterim, kontrolcüyüm.", "Kin tutarım, yapılan hatayı yıllar geçse de unutmam, yüzüne vururum.", "Dışarıdan sakin görünürüm ama kafamda hep senaryolar yazarım.", "Saman alevi gibiyimdir, aniden parlar ortalığı yıkarım, 5 dakika sonra pamuk gibi olurum."]},
+    {"q": "Mahalleden biri arkandan atıp tutmuş, kulağına geldi. Ne yaparsın? 👂", "c": ["Yüzüne gülerim ama defterini sonsuza kadar dürmüşümdür. (Sinsi/Gururlu)", "Gider kapısına dayanır, 'Hayırdır inşallah?' diye hesap sorarım. (Dobra)", "Hiç bozuntuya vermem, altın gününde lafı gediğine oturturum. (Zarif intikam)", "Umursamam ama içten içe günlerce kafama takar, sinir olurum. (Alıngan)"]},
+    {"q": "Aile içinde bir şeye çok gıcık oldun. Tepkin ne olur? 🙄", "c": ["Surat asarım, buz gibi davranırım, tavrımdan anlasınlar. (Pasif-Agresif)", "Laf sokarım, anlarsa anlar, anlamazsa kendi bilir. (İğneleyici)", "Hiçbir şey demem ama gidip başkasına şikayet ederim. (Dedikoducu)", "Çat diye söylerim, içimde patlayacağına onda dert olsun. (Patavatsız)"]},
+    {"q": "Evde kimsenin pek bilmediği, en belirgin gizli huyun nedir? 🤫", "c": ["Her şey benim dediğim gibi olsun isterim, kontrolcüyüm.", "Kin tutarım, yapılan hatayı yıllar geçse de unutmam, yüzüne vururum.", "Dışarıdan sakin görünürüm ama kafamda hep senaryolar yazarım.", "Saman alevi gibiyimdir, aniden parlar ortalığı yıkarım, pamuk gibi olurum."]},
     {"q": "Yakın bir arkadaşın senden daha lüks/güzel bir şey aldı. İlk tepkin ne olur? 💎", "c": ["Güle güle kullansın derim ama içimden 'Keşke benim olsaydı' diye geçiririm.", "Hemen neresinde bir kusur var diye incelemeye başlarım.", "'Aman canım benimkiler bana yeter' diyerek kendimi avuturum.", "Hırs yaparım, en kısa zamanda aynısından veya daha iyisinden alırım."]}
 ]
 
 kotu_komedi_pool = [
     {"q": "Kabul et, bazen kötü olmak çok zevkli! Yeşilçam'da bir kötü olsaydın imza hareketin ne olurdu? 😈", "c": ["Gözlerimi kısarak sinsi sinsi gülmek ve başkalarının kuyusunu kazmak.", "Gazozuna ilacı atıp (veya dedikoduyla) safları tuzağa düşürmek.", "Masaya yumruğu vurup 'Bu evlilik ASLA olmayacak!' diyerek ortalığı karıştırmak.", "Parayla herkesi ve her şeyi satın alabileceğimi düşünerek kibirle tepeden bakmak."]},
-    {"q": "Mahallede büyük bir kavga koptu ve aslında sen haksızsın. İşin içinden nasıl sıyrılırsın? 🎭", "c": ["Laf cambazlığıyla üste çıkar, haklıyı haksız duruma düşürürüm.", "Hemen acındırma politikası yapar, anında mağduru oynarım.", "Hiç çaktırmadan 'Ben yapmadım ki, o başlattı' diyerek suçu başkasına atarım.", "Umurumda bile olmaz, 'Yaptım, yine olsa yine yaparım!' der geçerim."]},
-    {"q": "Gıcık olduğun biri yolda ayağı takılıp düştü. İçinden ne geçer? 🤭", "c": ["Zar zor gülmemi tutarım, içimden 'İlahi adalet işte' derim.", "Gidip 'Ayy canım iyi misin?' derim ama aslında düşmesine bayılmışımdır.", "Gözünün içine baka baka kahkahayı patlatırım.", "Ben düşürmedim ama düşsün diye içimden geçirmiş olabilirim."]}
+    {"q": "Mahallede büyük bir kavga koptu ve aslında sen haksızsın. İşin içinden nasıl sıyrılırsın? 🎭", "c": ["Laf cambazlığıyla üste çıkar, haklıyı haksız duruma düşürürüm.", "Hemen acındırma politikası yapar, anında mağduru oynarım.", "Hiç çaktırmadan 'Ben yapmadım ki, o başlattı' diyerek suçu başkasına atarım.", "Umurumda bile olmaz, 'Yaptım, yine olsa yine yaparım!' der geçerim."]}
 ]
 
 replik_fali_pool = [
@@ -77,17 +76,26 @@ replik_fali_pool = [
     {"r": "Bedenime sahip olabilirsin ama ruhuma asla!", "t": "Bugün birileri seni zorlayabilir. Duruşunu bozma, iç dünyanı koru."}
 ]
 
-# ==========================================
-# PAYLAŞIM BUTONLARI
-# ==========================================
+# Hafıza Oyunu Ürünleri
+bakkal_urunleri = [
+    {"isim": "Sarıyer Gazozu 🥤", "fiyat": 25},
+    {"isim": "Pötibör Bisküvi 🍪", "fiyat": 30},
+    {"isim": "Yarım Kilo Çay ☕", "fiyat": 120},
+    {"isim": "Ezine Peyniri 🧀", "fiyat": 150},
+    {"isim": "Köy Yumurtası (10'lu) 🥚", "fiyat": 60},
+    {"isim": "Kangal Sucuk 🥩", "fiyat": 250},
+    {"isim": "Açık Zeytin 🫒", "fiyat": 100},
+    {"isim": "Somun Ekmek 🥖", "fiyat": 10},
+    {"isim": "Toz Şeker 🍬", "fiyat": 45},
+    {"isim": "Türk Kahvesi ☕", "fiyat": 50}
+]
+
 def paylasim_butonlari_olustur(metin):
     hazir_mesaj = f"{metin}\n\nSen hangi efsanesin? Hemen testi çöz: {SITENIZIN_LINKI}"
     encoded_mesaj = urllib.parse.quote(hazir_mesaj)
     encoded_url = urllib.parse.quote(SITENIZIN_LINKI)
-    
     fb_link = f"https://www.facebook.com/sharer/sharer.php?u={encoded_url}&quote={encoded_mesaj}"
     wa_link = f"https://api.whatsapp.com/send?text={encoded_mesaj}"
-    
     st.markdown(f"""
         <div style="margin-top: 20px; margin-bottom: 20px;">
             <a href="{fb_link}" target="_blank" class="share-btn fb-btn">📘 Facebook'ta Paylaş</a>
@@ -97,9 +105,9 @@ def paylasim_butonlari_olustur(metin):
     """, unsafe_allow_html=True)
 
 # ==========================================
-# PART 3: SEKME SİSTEMİ
+# PART 3: SEKME SİSTEMİ (ARTIK 4 SEKME VAR)
 # ==========================================
-tab1, tab2, tab3 = st.tabs(["🎭 Ruhundaki Jön/Sultan", "🦹‍♂️ Kötüler ve Komedyenler", "🥠 Günlük Replik Falı"])
+tab1, tab2, tab3, tab4 = st.tabs(["🎭 Jön/Sultan", "🦹‍♂️ Kötüler/Komedi", "🥠 Replik Falı", "🛒 Bakkal Hafızası"])
 
 with tab1:
     st.markdown("<h3 style='text-align: center; color: #ffe0b3;'>Gerçek Yüzünle Efsanevi Bir Kahraman Mısın?</h3>", unsafe_allow_html=True)
@@ -122,7 +130,7 @@ with tab1:
                     havuz = "Türkan Şoray, Fatma Girik, Filiz Akın, Hülya Koçyiğit" if "Kadın" in cinsiyet else "Kadir İnanır, Tarık Akan, Cüneyt Arkın, Kemal Sunal"
                     resim_kodlari = "TURKAN, FATMA, FILIZ, HULYA" if "Kadın" in cinsiyet else "KADIR, TARIK, CUNEYT, KEMAL"
 
-                    prompt = f"Kullanıcı ({cinsiyet}) gerçekçi ve hafif kusurlu şıkların olduğu bir Yeşilçam testi çözdü. Cevapları: {cevaplar_1}. Onu bu psikolojik cevaplarına göre {havuz} havuzundan biriyle eşleştir.\nTON: Nostaljik Yeşilçam sunucusu gibi, onun o kusurlu/harbi yanını hafif mizahi bir dille öv.\nSATIR 1: Sadece ve sadece resim kodunu yaz ({resim_kodlari}). Başka kelime ekleme.\nSATIR 2: Sosyal medya metni."
+                    prompt = f"Kullanıcı ({cinsiyet}) gerçekçi ve kusurlu şıkların olduğu bir Yeşilçam testi çözdü. Cevapları: {cevaplar_1}. Onu {havuz} havuzundan eşleştir.\nSATIR 1: Sadece ve sadece resim kodunu yaz ({resim_kodlari}). Başka kelime ekleme.\nSATIR 2: Sosyal medya metni."
                     res = client.models.generate_content(model='gemini-2.5-flash', contents=[prompt])
                     
                     resim_kodu_ham, facebook_metni = res.text.strip().split('\n', 1)
@@ -226,3 +234,74 @@ with tab3:
             """, unsafe_allow_html=True)
             
             paylasim_butonlari_olustur(f"Bugünkü Yeşilçam Falımı çektim:\n{fal_metni}")
+
+# ------------------------------------------
+# YENİ TAB 4: BAKKAL HULUSİ AMCA HAFIZA OYUNU
+# ------------------------------------------
+with tab4:
+    st.markdown("<h3 style='text-align: center; color: #ffe0b3;'>🛒 Hulusi Amca'nın Bakkalı</h3>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; font-size: 18px;'>Aman dikkat et! Hulusi Amca bazen raflardaki fiyatları kasaya yanlış giriyor. Bakalım hafızan ne kadar güçlü?</p>", unsafe_allow_html=True)
+    st.markdown("---")
+
+    # Oyun durumunu kontrol eden mekanizma (State Machine)
+    if 'bakkal_adim' not in st.session_state:
+        st.session_state.bakkal_adim = 0
+
+    # ADIM 0: Başlangıç
+    if st.session_state.bakkal_adim == 0:
+        if st.button("🛒 Alışverişe Başla", key="basla_bakkal"):
+            secilenler = random.sample(bakkal_urunleri, 4)
+            st.session_state.raftaki_fiyatlar = {u["isim"]: u["fiyat"] for u in secilenler}
+            st.session_state.degisecek_urun = random.choice(list(st.session_state.raftaki_fiyatlar.keys()))
+
+            # Kasada sadece 1 ürünün fiyatı değişecek
+            kasadaki_fiyatlar = st.session_state.raftaki_fiyatlar.copy()
+            degisim = random.choice([5, 10, 15, -5, -10])
+            kasadaki_fiyatlar[st.session_state.degisecek_urun] += degisim
+            st.session_state.kasadaki_fiyatlar = kasadaki_fiyatlar
+
+            st.session_state.bakkal_adim = 1
+            st.rerun()
+
+    # ADIM 1: Raf Fiyatlarını Gösterme
+    elif st.session_state.bakkal_adim == 1:
+        st.info("👇 Raftaki fiyatlara iyice bak ve aklında tut! Birazdan kasaya gideceksin.")
+        st.markdown("<div style='background-color: #4d0026; padding: 20px; border-radius: 10px; border: 2px solid #ffcc00;'>", unsafe_allow_html=True)
+        
+        for isim, fiyat in st.session_state.raftaki_fiyatlar.items():
+            st.markdown(f"<h4 style='color: white;'>{isim} : <span style='color: #ffcc00;'>{fiyat} TL</span></h4>", unsafe_allow_html=True)
+        st.markdown("</div><br>", unsafe_allow_html=True)
+
+        if st.button("💳 Kasaya Git", key="kasaya_git"):
+            st.session_state.bakkal_adim = 2
+            st.rerun()
+
+    # ADIM 2: Kasa Fişi ve Tahmin
+    elif st.session_state.bakkal_adim == 2:
+        st.warning("🧐 Hulusi Amca fişi kesti ama bir ürünün fiyatı raftakinden farklı! Sence hangisi değişmiş?")
+        
+        st.markdown("<div style='background-color: #33001a; padding: 20px; border-radius: 10px; border: 2px dashed white;'>", unsafe_allow_html=True)
+        for isim, fiyat in st.session_state.kasadaki_fiyatlar.items():
+            st.markdown(f"<h4 style='color: white;'>{isim} : <span style='color: #ffcc00;'>{fiyat} TL</span></h4>", unsafe_allow_html=True)
+        st.markdown("</div><br>", unsafe_allow_html=True)
+
+        tahmin = st.radio("Fiyatı yanlış yazılan ürün hangisi?", list(st.session_state.kasadaki_fiyatlar.keys()), index=None, key="tahmin_bakkal")
+
+        if st.button("✅ Tahminimi Kontrol Et", key="kontrol_et"):
+            if tahmin:
+                st.session_state.son_tahmin = tahmin
+                st.session_state.bakkal_adim = 3
+                st.rerun()
+            else:
+                st.warning("Lütfen şıklardan birini seç!")
+
+    # ADIM 3: Sonuç ve Tekrar Oynama
+    elif st.session_state.bakkal_adim == 3:
+        if st.session_state.son_tahmin == st.session_state.degisecek_urun:
+            st.success(f"🎉 Helal olsun! Zehir gibi hafızan var. Fiyatı değişen ürün {st.session_state.degisecek_urun} idi!")
+        else:
+            st.error(f"Ah be! Değişen ürün '{st.session_state.degisecek_urun}' olacaktı. Olsun, dalgınlığına gelmiştir.")
+
+        if st.button("🔄 Tekrar Oyna", key="tekrar_bakkal"):
+            st.session_state.bakkal_adim = 0
+            st.rerun()
